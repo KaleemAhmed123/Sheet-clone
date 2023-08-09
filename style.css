@@ -78,7 +78,38 @@
   width: 100%;
   height: calc(100vh - 3rem - 3rem - 2rem - 2.5rem);
   background-color: white;
+  position: relative;
 }
+.top-left-dummy{
+  width: 2rem;
+  height: 2rem;
+  background-color: #747d8c;
+}
+.col-name-cont {
+  width: 2rem;
+  /* need to calculate */
+  height: 20rem;  
+  background-color: #135f4f;
+}
+
+.cells-cont{
+  width: 100%;
+  height: 100%;
+  background-color: aqua;
+  position: absolute;
+  top: 0;
+  left: 2rem;
+}
+.row-name-cont {
+  height: 2rem;
+  background-color: #135f4f;
+}
+
+
+
+
+
+
 
 /* =================================================== */
 .sheet-cont{
