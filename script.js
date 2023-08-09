@@ -32,7 +32,22 @@ for (let i = 0; i < row; i++) {
     cells.setAttribute("class", "cell");
     cells.setAttribute("contenteditable", "true");
     individRow.appendChild(cells);
+
+    // event for address bar c2, b4 etc
+    attachListener(cells, i, j);
   }
 
   gridCellsContainer.appendChild(individRow);
+}
+
+// address bar which tell about rowAndCol num eg C2, F30 etc..
+const addressBarContainer = document.querySelector(".address-bar");
+function attachListener(cells, i, j) {
+  cells.addEventListener("click", (e) => {
+    // addressBarContainer.innerText = `${String.fromCharCode(j)}${i + 1}`;
+    // input type hai
+    addressBarContainer.value = `${String.fromCharCode(65 + j)}${i + 1}`;
+
+    e.preventDefault();
+  });
 }

@@ -47,6 +47,13 @@
 
 
 /* ================================================ */
+
+.address-bar{
+  text-align: center;
+  font-weight: 500;
+  font-size: 100%;
+}
+
 .formula-cont{
   width: 100%;
   height: 2rem;
