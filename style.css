@@ -5,9 +5,9 @@
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
 }
 :root{
-  --green: #135f4f;
+  --green: #166b59;
   --color-light: #e0e4e6;
-  --border-color: #d2d4d6;
+  --border-color: #e9ebee;
 }
 /* ========================================= */
 .main-action-cont{
@@ -36,6 +36,7 @@
 .cell-edit-cont > * {
   display: inline-block;
   margin-right: 0.7rem;
+  cursor: pointer;
 }
 .cell-edit-cont > select{
   padding: 0.15rem;
@@ -44,7 +45,16 @@
   border-radius: 3px;
 
 }
-
+.color-cont{
+  position: relative;
+}
+.color-cont >input{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+}
 
 /* ================================================ */
 
@@ -136,7 +146,7 @@
   left: 2rem;
 }
 .row-num-cell{
-  width: 5rem;
+  width: 6rem;
   height: 2rem;
     border: 1px solid var(--border-color);
   display: flex;
@@ -148,7 +158,7 @@
 }
 
 .cell{
-  width: 5rem;
+  width: 6rem;
   height: 2rem;
   border: 1px solid var(--border-color);
   /* border: none; */
