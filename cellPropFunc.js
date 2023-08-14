@@ -12,6 +12,10 @@ for (let i = 0; i < rows; i++) {
       align: "left",
       textColor: "#000000",
       BGcolor: "#69376d", // 'indicator (rare color)
+
+      value: "",
+      formula: "",
+      children: [],
     };
     // push cell obj in row
     rowDB.push(ds);
