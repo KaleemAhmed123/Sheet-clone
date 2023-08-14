@@ -48,7 +48,7 @@
 .color-cont{
   position: relative;
 }
-.color-cont >input{
+.color-cont > input{
   position: absolute;
   top: 0;
   left: 0;

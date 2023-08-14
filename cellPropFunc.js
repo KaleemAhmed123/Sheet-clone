@@ -11,7 +11,7 @@ for (let i = 0; i < rows; i++) {
       italic: false,
       align: "left",
       textColor: "#000000",
-      BGcolor: "#000000", // 'indixator
+      BGcolor: "#69376d", // 'indicator (rare color)
     };
     // push cell obj in row
     rowDB.push(ds);
@@ -19,7 +19,7 @@ for (let i = 0; i < rows; i++) {
   gridDB.push(rowDB);
 }
 
-let activeColor = "#d1d8e0";
+let activeColor = "#c2c8cf";
 let inactiveColor = "#dbe1e9";
 // icon selectors
 
@@ -148,6 +148,68 @@ alignmentIcons.forEach((alignElm) => {
     }
   });
 });
+
+// if we are at cell A2 and got to A3 all the properties of A1 (icon UI) will be visible
+// becz there is not listener for cell prop to get prop of that cell to be reflected
+
+let allCells = document.querySelectorAll(".cell");
+
+// "touchstart"
+for (let i = 0; i < allCells.length; i++) {
+  updateCellAndUiwithObj(allCells[i]);
+}
+
+function updateCellAndUiwithObj(cell) {
+  cell.addEventListener("click", (e) => {
+    // cellObj ka access nahi hai only cellDOm ka access hai so
+    let addressBarValue = addressBarContainer.value;
+    let [rid, cid] = decodeAddress(addressBarValue);
+
+    cellObj = gridDB[rid][cid]; // access to obj
+
+    // updating cell properties
+    cell.style.fontWeight = cellObj.bold ? "bold" : "normal"; // cell prop change
+    cell.style.textDecoration = cellObj.underline ? "underline" : "none"; // cell prop change
+    cell.style.fontStyle = cellObj.italic ? "italic" : "normal"; // cell prop change
+    cell.style.fontSize = cellObj.fontSize + "px"; // cell prop change
+    cell.style.fontFamily = cellObj.fontFamily; // UI change with data
+    cell.style.color = cellObj.textColor; // UI change with data
+    cell.style.backgroundColor =
+      cellObj.BGcolor === "#69376d" ? "transparent" : cellObj.BGcolor; // UI change with data
+
+    cell.style.textAlign = cellObj.align; // UI change with data
+
+    // now getting icon UI according to cellObj (what matters)
+    boldIcon.style.backgroundColor = cellObj.bold ? activeColor : inactiveColor; // icon UI change
+    underlineIcon.style.backgroundColor = cellObj.underline
+      ? activeColor
+      : inactiveColor; // icon UI change
+    italicIcon.style.backgroundColor = cellObj.italic
+      ? activeColor
+      : inactiveColor; // icon UI change
+    fontSizeInput.value = cellObj.fontSize;
+    fontFamilyInput.value = cellObj.fontFamily;
+    fontColorInput.value = cellObj.textColor;
+    BGColorInput.value = cellObj.BGcolor;
+    switch (cellObj.align) {
+      case "left":
+        leftAlignIcon.style.backgroundColor = activeColor;
+        centerAlignIcon.style.backgroundColor = inactiveColor;
+        rightAlignIcon.style.backgroundColor = inactiveColor;
+        break;
+      case "center":
+        leftAlignIcon.style.backgroundColor = inactiveColor;
+        centerAlignIcon.style.backgroundColor = activeColor;
+        rightAlignIcon.style.backgroundColor = inactiveColor;
+        break;
+      case "right":
+        leftAlignIcon.style.backgroundColor = inactiveColor;
+        centerAlignIcon.style.backgroundColor = inactiveColor;
+        rightAlignIcon.style.backgroundColor = activeColor;
+        break;
+    }
+  });
+}
 
 // generic
 function activateCell(addressBarValue) {
