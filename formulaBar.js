@@ -12,12 +12,19 @@ for (let i = 0; i < rows; i++) {
       let [cellObj, cellDom] = activateCell(addressBarValue);
       let enteredValue = cellDom.innerText;
 
+      if (enteredValue === cellObj.value) return;
+
       cellObj.value = enteredValue;
+
+      // if user changes value of a cell then if previous we had formula dependency
+      // so remove formula and update currCell value and update its child accordingly
+      removeParentChildRelation(cellObj.formula); // pahle ye
+      cellObj.formula = "";
+      // update children with nwe harcoded value since formula empty so value updated
+      updateChildCells(addressBarValue);
     });
   }
 }
-
-let formulaBarContainer = document.querySelector(".formula-bar");
 
 formulaBarContainer.addEventListener("keydown", (e) => {
   let inputFormula = formulaBarContainer.value;
@@ -34,10 +41,11 @@ formulaBarContainer.addEventListener("keydown", (e) => {
     let evaluatedValue = evaluateFormula(inputFormula);
 
     // update UI and save value in cellObj.value
-    setCellUIandObj(evaluatedValue, inputFormula);
+    setCellUIandObj(evaluatedValue, inputFormula, addressBarValue);
     // C1 = [B1 + A1] so C1's child are B1 and A1
     addParentChildRelation(inputFormula);
     // curr.obj,child,push(A1, B1)
+    updateChildCells(addressBarValue);
   }
 });
 
@@ -71,9 +79,29 @@ function addParentChildRelation(formula) {
       let [cellObj] = activateCell(encodedFormula[i]);
 
       cellObj.children.push(childAddress);
-      //   console.log(cellObj.children);
+      console.log(cellObj.children);
+      // console.log(gridDB);
     }
   }
+}
+
+// dependency update
+function updateChildCells(parentAddress) {
+  let [parentCObj, parentDom] = activateCell(parentAddress);
+  let children = parentCObj.children;
+
+  for (let i = 0; i < children.length; i++) {
+    let childAddress = children[i];
+    let [childObj, childDom] = activateCell(childAddress);
+    let childFormula = childObj.formula;
+
+    let evaluatedValue = evaluateFormula(childFormula);
+    setCellUIandObj(evaluatedValue, childFormula, childAddress);
+
+    // lets say B1 child is updated now call for B1's child
+    updateChildCells(childAddress);
+  }
+  return;
 }
 
 // when user enters new formula for used cell then ?
@@ -82,7 +110,7 @@ function addParentChildRelation(formula) {
 function removeParentChildRelation(oldFormula) {
   // oldFormula se relation break hoga
   let childAddress = addressBarContainer.value;
-  let encodedFormula = formula.split(" ");
+  let encodedFormula = oldFormula.split(" ");
 
   for (let i = 0; i < encodedFormula.length; i++) {
     let firstChar = encodedFormula[i].charCodeAt(0);
@@ -99,8 +127,9 @@ function removeParentChildRelation(oldFormula) {
   }
 }
 
-function setCellUIandObj(evaluatedValue, formula) {
-  let addressBarValue = addressBarContainer.value;
+// making generic by passing address
+function setCellUIandObj(evaluatedValue, formula, addressBarValue) {
+  // let addressBarValue = addressBarContainer.value;
   let [cellObj, cellDom] = activateCell(addressBarValue);
 
   // data update

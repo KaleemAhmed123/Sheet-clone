@@ -37,6 +37,7 @@ const fontSizeInput = document.querySelector(".font-size");
 const fontFamilyInput = document.querySelector(".font-family");
 const fontColorInput = document.querySelector(".text-color");
 const BGColorInput = document.querySelector(".BG-color");
+let formulaBarContainer = document.querySelector(".formula-bar");
 
 // adding property listener
 // we need access of that active cell on which we click bold, align, ...
@@ -212,6 +213,9 @@ function updateCellAndUiwithObj(cell) {
         rightAlignIcon.style.backgroundColor = activeColor;
         break;
     }
+    // let formulaBarContainer = document.querySelectorAll(".formula-bar");
+    formulaBarContainer.value = cellObj.formula;
+    cell.value = cellObj.value;
   });
 }
 
