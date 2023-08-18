@@ -39,7 +39,7 @@ function traceCyclePath(graphComponentsGrid, cycleResponse) {
   return false;
 }
 
-function detectCycleTracePath(
+async function detectCycleTracePath(
   graphComponentsGrid,
   srcRow,
   srcCol,
@@ -52,9 +52,9 @@ function detectCycleTracePath(
   let cell = document.querySelectorAll(
     `.cell[row_id="${srcRow}"][col_id="${srcCol}"]`
   );
-  setTimeout(() => {
-    cell.style.background = "lightblue";
-  }, 100);
+
+  cell.style.background = "lightblue";
+  await colorPromise(); // will resolve after 1sec (our pause delay) and then next line
 
   // graphComponentsGrid[i][j] me dependency nodes [[1,0],[3,9],[0,4]] hogi
 
@@ -78,10 +78,8 @@ function detectCycleTracePath(
       ) {
         // 1->2->3->4->5->1 we got cycle at 1 now al 5 4 3 2 will return true by going back
         // so here we remove our blue color from background
-        setTimeout(() => {
-          cell.style.background = "tranparent";
-        }, 100);
-
+        cell.style.background = "lightblue";
+        await colorPromise(); /// 1sec pause
         return true;
       }
     } else if (pathVisited[nbrRid][nbrCid] === true) {
@@ -89,10 +87,10 @@ function detectCycleTracePath(
         `.cell[row_id="${nbrRid}"][col_id="${nbrCid}"]`
       );
       // orange indicator of going back
-      setTimeout(() => {
-        cyclicCell.style.background = "lightsalmon";
-      }, 100);
+      cyclicCell.style.background = "lightsalmon";
+      await colorPromise(); /// 1sec pause
       cyclicCell.style.background = "tranparent";
+      await colorPromise();
 
       return true;
     }
@@ -102,6 +100,10 @@ function detectCycleTracePath(
   return false;
 }
 
-function delay() {
-  setTimeout(() => {}, 100);
+function colorPromise() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("done");
+    }, 1000);
+  });
 }
