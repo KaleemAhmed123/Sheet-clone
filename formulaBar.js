@@ -36,6 +36,14 @@ formulaBarContainer.addEventListener("keydown", (e) => {
     if (cellObj.formula !== inputFormula) {
       removeParentChildRelation(cellObj.formula);
     }
+    // formula evaluation se pahle cycleAlgo
+    addDependencyToGraph(inputFormula, addressBarValue);
+
+    if (isCyclic(graphComponentsGrid) === true) {
+      removeGraphDependency(inputFormula, addressBarValue);
+      alert("Your formula has dependency and its cyclic !!!!!!");
+      return;
+    }
 
     // break prev relation and then add new Val and relation
     let evaluatedValue = evaluateFormula(inputFormula);
@@ -48,6 +56,35 @@ formulaBarContainer.addEventListener("keydown", (e) => {
     updateChildCells(addressBarValue);
   }
 });
+
+// for graph comps
+function addDependencyToGraph(formula, address) {
+  let [crid, ccid] = decodeAddress(address);
+  let parentsArray = formula.split(" ");
+
+  for (let i = 0; i < parentsArray.length; i++) {
+    // Fix the loop condition here
+    let ascii = parentsArray[i].charCodeAt(0);
+    if (ascii >= 65 && ascii <= 90) {
+      let [prow, pcol] = decodeAddress(parentsArray[i]);
+      // pushing deps in that cell array which was empty
+      graphComponentsGrid[prow][pcol].push([crid, ccid]);
+    }
+  }
+}
+
+// if formula is cyclic remove dependency from graphComponent grid
+function removeGraphDependency(formula, address) {
+  let parents = formula.split(" ");
+
+  for (let i = 0; i < parents.length; i++) {
+    let ascii = parents[i].charCodeAt(0);
+    if (ascii >= 65 && ascii <= 90) {
+      let [prid, pcid] = decodeAddress(parents[i]);
+      graphComponentsGrid[prid][pcid].pop();
+    }
+  }
+}
 
 function evaluateFormula(formula) {
   let encodedFormula = formula.split(" ");
