@@ -39,9 +39,22 @@ formulaBarContainer.addEventListener("keydown", (e) => {
     // formula evaluation se pahle cycleAlgo
     addDependencyToGraph(inputFormula, addressBarValue);
 
-    if (isCyclic(graphComponentsGrid) === true) {
+    let cycleResponse = isCyclic(graphComponentsGrid); // null or [i,j]
+    if (cycleResponse) {
+      let response = confirm(
+        "Your formula is cyclic. Do you want to trace the path"
+      );
+
+      while (response === true) {
+        // keep showing color untill user stops
+        detectCycleTracePath(graphComponentsGrid, cycleResponse); // [i, j]
+        response = confirm(
+          "Your formula is cyclic. Do you want to trace the path"
+        );
+      }
+
       removeGraphDependency(inputFormula, addressBarValue);
-      alert("Your formula has dependency and its cyclic !!!!!!");
+      // alert("Your formula has dependency and its cyclic !!!!!!");
       return;
     }
 

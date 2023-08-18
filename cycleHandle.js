@@ -3,7 +3,6 @@
 // 2D grid and inside it 2d array  B1- [0,1], C1- [0,2] many depend
 
 let graphComponentsGrid = [];
-
 for (let i = 0; i < rows; i++) {
   let row = [];
   for (let j = 0; j < cols; j++) {
@@ -39,13 +38,13 @@ function isCyclic(graphComponentsGrid) {
         if (
           detectCycle(graphComponentsGrid, i, j, visited, pathVisited) === true
         )
-          return true;
+          return [i, j]; // for tracing start cycle path
       }
     }
   }
 
   // no component has cycle
-  return false;
+  return null;
 }
 
 function detectCycle(
