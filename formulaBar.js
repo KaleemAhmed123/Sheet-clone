@@ -26,7 +26,7 @@ for (let i = 0; i < rows; i++) {
   }
 }
 
-formulaBarContainer.addEventListener("keydown", (e) => {
+formulaBarContainer.addEventListener("keydown", async (e) => {
   let inputFormula = formulaBarContainer.value;
   if (e.key === "Enter" && inputFormula) {
     let addressBarValue = addressBarContainer.value;
@@ -47,7 +47,8 @@ formulaBarContainer.addEventListener("keydown", (e) => {
 
       while (response === true) {
         // keep showing color untill user stops
-        detectCycleTracePath(graphComponentsGrid, cycleResponse); // [i, j]
+        await traceCyclePath(graphComponentsGrid, cycleResponse); // [i, j]
+        // need to add waiting here also so instead we'll return promise not true false
         response = confirm(
           "Your formula is cyclic. Do you want to trace the path"
         );

@@ -1,4 +1,13 @@
-function traceCyclePath(graphComponentsGrid, cycleResponse) {
+// for delay and waiting
+function colorPromise() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("done");
+    }, 1000);
+  });
+}
+
+async function traceCyclePath(graphComponentsGrid, cycleResponse) {
   let [srcRow, srcCol] = cycleResponse;
 
   let visited = [];
@@ -24,8 +33,8 @@ function traceCyclePath(graphComponentsGrid, cycleResponse) {
   //       }
   //     }
   //   }
-
-  let response = detectCycleTracePath(
+  // call where we got cycle
+  let response = await detectCycleTracePath(
     graphComponentsGrid,
     srcRow,
     srcCol,
@@ -33,10 +42,10 @@ function traceCyclePath(graphComponentsGrid, cycleResponse) {
     pathVisited
   );
   if (response === true) {
-    return true;
+    return Promise.resolve(true);
   }
 
-  return false;
+  return Promise.resolve(false);
 }
 
 async function detectCycleTracePath(
@@ -49,11 +58,11 @@ async function detectCycleTracePath(
   visited[srcRow][srcCol] = true;
   pathVisited[srcRow][srcCol] = true;
 
-  let cell = document.querySelectorAll(
+  let cell = document.querySelector(
     `.cell[row_id="${srcRow}"][col_id="${srcCol}"]`
   );
 
-  cell.style.background = "lightblue";
+  cell.style.backgroundColor = "lightblue";
   await colorPromise(); // will resolve after 1sec (our pause delay) and then next line
 
   // graphComponentsGrid[i][j] me dependency nodes [[1,0],[3,9],[0,4]] hogi
@@ -67,43 +76,40 @@ async function detectCycleTracePath(
     let [nbrRid, nbrCid] = graphComponentsGrid[srcRow][srcCol][child];
 
     if (visited[nbrRid][nbrCid] === false) {
-      if (
-        detectCycle(
-          graphComponentsGrid,
-          nbrRid,
-          nbrCid,
-          visited,
-          pathVisited
-        ) === true
-      ) {
+      let response = await detectCycleTracePath(
+        graphComponentsGrid,
+        nbrRid,
+        nbrCid,
+        visited,
+        pathVisited
+      );
+      if (response === true) {
         // 1->2->3->4->5->1 we got cycle at 1 now al 5 4 3 2 will return true by going back
         // so here we remove our blue color from background
-        cell.style.background = "lightblue";
+        cell.style.backgroundColor = "transparent";
         await colorPromise(); /// 1sec pause
-        return true;
+        return Promise.resolve(true);
       }
     } else if (pathVisited[nbrRid][nbrCid] === true) {
-      let cyclicCell = document.querySelectorAll(
+      let cyclicCell = document.querySelector(
         `.cell[row_id="${nbrRid}"][col_id="${nbrCid}"]`
       );
       // orange indicator of going back
-      cyclicCell.style.background = "lightsalmon";
+      cyclicCell.style.backgroundColor = "lightsalmon";
       await colorPromise(); /// 1sec pause
-      cyclicCell.style.background = "tranparent";
+      cyclicCell.style.backgroundColor = "transparent";
+
+      // cyclicCell.style.backgroundColor = "transparent";
+      // prev jaha se call kiya tha us blue ko reset
+      cell.style.backgroundColor = "transparent";
+
       await colorPromise();
 
-      return true;
+      return Promise.resolve(true);
     }
   }
 
   pathVisited[srcRow][srcCol] = false;
-  return false;
-}
 
-function colorPromise() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve("done");
-    }, 1000);
-  });
+  return Promise.resolve(false);
 }
