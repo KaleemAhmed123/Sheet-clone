@@ -1,27 +1,36 @@
-const gridDB = [];
+let collectedSheetDB = []; // gridDB for each sheet[[], []...]
 
-for (let i = 0; i < rows; i++) {
-  const rowDB = [];
-  for (let j = 0; j < cols; j++) {
-    const ds = {
-      fontFamily: "monospace",
-      fontSize: 14,
-      bold: false,
-      underline: false,
-      italic: false,
-      align: "left",
-      textColor: "#000000",
-      BGcolor: "#69376d", // 'indicator (rare color)
-
-      value: "",
-      formula: "",
-      children: [],
-    };
-    // push cell obj in row
-    rowDB.push(ds);
-  }
-  gridDB.push(rowDB);
+{
+  // creating first sheet
+  let addSheetBtn = document.querySelector(".sheet-add-icon");
+  addSheetBtn.click();
+  handelSheetPropertiesValue();
 }
+
+// const gridDB = [];
+
+// for (let i = 0; i < rows; i++) {
+//   const rowDB = [];
+//   for (let j = 0; j < cols; j++) {
+//     const ds = {
+//       fontFamily: "monospace",
+//       fontSize: 14,
+//       bold: false,
+//       underline: false,
+//       italic: false,
+//       align: "left",
+//       textColor: "#000000",
+//       BGcolor: "#69376d", // 'indicator (rare color)
+
+//       value: "",
+//       formula: "",
+//       children: [],
+//     };
+//     // push cell obj in row
+//     rowDB.push(ds);
+//   }
+//   gridDB.push(rowDB);
+// }
 
 let activeColor = "#c2c8cf";
 let inactiveColor = "#dbe1e9";

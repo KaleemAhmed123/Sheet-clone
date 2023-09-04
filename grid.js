@@ -56,5 +56,5 @@ function attachListener(cells, i, j) {
   });
 }
 // default first select (else address bar will be empty)
-const firstCell = document.querySelector(".cell");
-firstCell.click();
+// const firstCell = document.querySelector(".cell");
+// firstCell.click();

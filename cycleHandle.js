@@ -2,15 +2,17 @@
 // so just like we created gridDB objs we'll have row, cell,child
 // 2D grid and inside it 2d array  B1- [0,1], C1- [0,2] many depend
 
-let graphComponentsGrid = [];
-for (let i = 0; i < rows; i++) {
-  let row = [];
-  for (let j = 0; j < cols; j++) {
-    // is empty array me deps hongi
-    row.push([]); // will push etc [[0,1], [2,3]]
-  }
-  graphComponentsGrid.push(row);
-}
+let collectedGraphComponentGrid = []; // for each sheet diff grid
+
+// let graphComponentsGrid = [];
+// for (let i = 0; i < rows; i++) {
+//   let row = [];
+//   for (let j = 0; j < cols; j++) {
+//     // is empty array me deps hongi
+//     row.push([]); // will push etc [[0,1], [2,3]]
+//   }
+//   graphComponentsGrid.push(row);
+// }
 
 function isCyclic(graphComponentsGrid) {
   // Initialize the visited and pathVisited arrays with false values
